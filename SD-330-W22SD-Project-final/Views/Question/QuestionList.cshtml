@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Question>
+
+@{
+    ViewData["Title"] = "Questions List";
+    string userName = string.Empty;
+    if(ViewBag.UserInfo != null)
+    {
+        userName = ViewBag.UserInfo.UserName;
+    }
+}
+
+
+<h1>QuestionList</h1>
+
+<p>
+    <a asp-action="AddQuestion">Add New</a>
+</p>
+<table class="table"id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td> 
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @if(userName == item.UserName)
+                    {
+                        <a asp-action="ViewQuestion" asp-route-id="@item.QuestionId">Details | </a>
+                        <a asp-action="UpdateQuestion" asp-route-id="@item.QuestionId">Edit | </a>
+                        <a asp-action="DeleteQuestion" asp-route-id="@item.QuestionId">Delete</a>
+                    }
+                    else
+                    {
+                        if(item.Answers != null && item.Answers.Any(x=>x.UserName != userName))
+                        {
+                            <a asp-action="AddAnswer" asp-controller="Answer" asp-route-id="@item.QuestionId">Add Answer | </a>
+                        }
+                        <a asp-action="ViewQuestion" asp-route-id="@item.QuestionId">Details</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

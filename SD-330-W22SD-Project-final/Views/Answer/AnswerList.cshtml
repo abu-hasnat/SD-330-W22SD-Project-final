@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Answer>
+
+@{
+    ViewData["Title"] = "AnswerList";
+    string userName = string.Empty;
+    if(ViewBag.UserInfo != null)
+    {
+        userName = ViewBag.UserInfo.UserName;
+    }
+}
+
+<h1>AnswerList</h1>
+
+
+<table class="table" id="myTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Question.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+             <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Question.Title)
+                </td>
+                 <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @if(userName == item.UserId)
+                    {
+                        <a asp-action="ViewAnswer" asp-route-id="@item.AnswerId">Details | </a>
+                        <a asp-action="UpdateAnswer" asp-route-id="@item.AnswerId">Edit | </a>
+                        <a asp-action="DeleteAnswer" asp-route-id="@item.AnswerId">Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-action="ViewAnswer" asp-route-id="@item.AnswerId">Details</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
